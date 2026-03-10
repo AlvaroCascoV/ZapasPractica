@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using ZapasPractica.Data;
+using ZapasPractica.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<RepositoryZapas>();
+
+string connectionString = builder.Configuration.GetConnectionString("SQLHospital");
+builder.Services.AddDbContext<ZapasContext>(options => options.UseSqlServer(connectionString));
+
 
 var app = builder.Build();
 

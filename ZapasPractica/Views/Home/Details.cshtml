@@ -1,0 +1,74 @@
+﻿@model Zapatilla
+
+@{
+    int primero = 1;
+    int anterior = (int)ViewData["ANTERIOR"];
+    int siguiente = (int)ViewData["SIGUIENTE"];
+    int ultimo = (int)ViewData["ULTIMO"];
+    int posicion = (int)ViewData["POSICION"];
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var id = $("#cajaid").val();
+            var posicionActual = @posicion;
+            
+            $("#fotoszapa").load("/Home/_ZapatillasDetails?idzapatilla=" + id + "&posicion=" + @primero);
+            $("#botonPrimero").click(function() {
+                posicionActual = @primero;
+                $("#fotoszapa").load("/Home/_ZapatillasDetails?idzapatilla=" + id + "&posicion=" + posicionActual);
+                $("#posicionTexto").text(posicionActual);
+            });
+            $("#botonAnterior").click(function() {
+                posicionActual = posicionActual - 1;
+                if (posicionActual < 1) posicionActual = 1;
+                $("#fotoszapa").load("/Home/_ZapatillasDetails?idzapatilla=" + id + "&posicion=" + posicionActual);
+                $("#posicionTexto").text(posicionActual);
+            });
+            $("#botonSiguiente").click(function() {
+                posicionActual = posicionActual + 1;
+                if (posicionActual > @ultimo) posicionActual = @ultimo;
+                $("#fotoszapa").load("/Home/_ZapatillasDetails?idzapatilla=" + id + "&posicion=" + posicionActual);
+                $("#posicionTexto").text(posicionActual);
+            });
+            $("#botonUltimo").click(function() {
+                posicionActual = @ultimo;
+                $("#fotoszapa").load("/Home/_ZapatillasDetails?idzapatilla=" + id + "&posicion=" + posicionActual);
+                $("#posicionTexto").text(posicionActual);
+            });
+        });
+    </script>
+}
+
+<h1>Details</h1>
+
+<div class="border border-2">
+    <input hidden value="@Model.IdProducto" id="cajaid" />
+    <h5>Nombre: @Model.Nombre</h5>
+    <p>@Model.Descripcion</p>
+    <p>Precio: @Model.Precio</p>
+</div>
+
+
+<div id="fotoszapa" style="background-color:yellowgreen"></div>
+
+<h3>Imagen <span id="posicionTexto">@posicion</span> de @ultimo</h3>
+<ul class="list-group list-group-horizontal mb-3">
+    <li class="list-group-item">
+        <button id="botonPrimero">Primero</button>
+    </li>
+    <li class="list-group-item">
+        <button id="botonAnterior">Anterior</button>
+    </li>
+    <li class="list-group-item">
+        <button id="botonSiguiente">Siguiente</button>
+    </li>
+    <li class="list-group-item">
+        <button id="botonUltimo">Ultimo</button>
+    </li>
+</ul>
+<hr />
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
